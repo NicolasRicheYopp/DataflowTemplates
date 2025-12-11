@@ -26,6 +26,7 @@ import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalTime;
 import org.apache.beam.sdk.transforms.DoFn;
 
 /** Factory to construct {@link BoundarySplitter} for supported classes. */
@@ -67,6 +68,11 @@ public class BoundarySplitterFactory {
               (BoundarySplitter<Timestamp>)
                   (start, end, partitionColumn, boundaryTypeMapper, processContext) ->
                       splitTimestamps(start, end))
+          .put(
+              LocalTime.class,
+              (BoundarySplitter<LocalTime>)
+                (start, end, partitionColumn, boundaryTypeMapper, processContext) ->
+                      splitLocalTimes(start, end))
           .put(
               Float.class,
               (BoundarySplitter<Float>)
@@ -267,6 +273,10 @@ public class BoundarySplitterFactory {
 
   private static Timestamp splitTimestamps(Timestamp start, Timestamp end) {
     return instantToTimestamp(splitInstants(timeStampToInstant(start), timeStampToInstant(end)));
+  }
+
+  private static LocalTime splitLocalTimes(LocalTime start, LocalTime end) {
+    // TODO: convert to instant for split and than convert back the result mid point to LocalTime?
   }
 
   private static Float splitFloats(Float start, Float end) {
