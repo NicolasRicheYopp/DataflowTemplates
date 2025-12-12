@@ -126,7 +126,7 @@ public abstract class Boundary<T extends Serializable>
     }
     // TODO special step size for Double
     // TODO special step size for Decimal
-    // TODO special step size for Time(fractional seconds)
+    // ---> TODO special step size for Time(fractional seconds)
 
     return Objects.equal(valueA, valueB);
   }

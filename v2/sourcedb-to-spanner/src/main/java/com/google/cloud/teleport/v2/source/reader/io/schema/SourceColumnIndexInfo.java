@@ -22,6 +22,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.time.LocalTime;
 import javax.annotation.Nullable;
 
 @AutoValue
@@ -148,6 +149,7 @@ public abstract class SourceColumnIndexInfo implements Comparable<SourceColumnIn
     BINARY,
     STRING,
     TIME_STAMP,
+    TIME,
     FLOAT,
     OTHER
   };
@@ -160,5 +162,6 @@ public abstract class SourceColumnIndexInfo implements Comparable<SourceColumnIn
           IndexType.BIG_INT_UNSIGNED, BigDecimal.class,
           IndexType.BINARY, BoundaryExtractorFactory.BYTE_ARRAY_CLASS,
           IndexType.TIME_STAMP, Timestamp.class,
+          IndexType.TIME, LocalTime.class,
           IndexType.FLOAT, Float.class);
 }

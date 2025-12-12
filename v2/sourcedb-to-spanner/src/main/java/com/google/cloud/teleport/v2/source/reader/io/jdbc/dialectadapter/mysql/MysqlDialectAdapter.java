@@ -431,6 +431,7 @@ public final class MysqlDialectAdapter implements DialectAdapter {
         @Nullable String collation = rs.getString(InformationSchemaStatsCols.COLLATION_COL);
         @Nullable String padSpace = getPadSpaceString(rs);
         int numericScale = rs.getInt(InformationSchemaStatsCols.NUMERIC_SCALE_COL);
+        int datetimePrecision = rs.getInt(InformationSchemaStatsCols.DATETIME_PRECISION_COL);
         logger.debug(
             "Discovered column {} from index {}, isUnique {}, isPrimary {}, cardinality {}, ordinalPosition {}, character-set {}, collation {}, pad-space {}, numeric-scale {}",
             colName,
@@ -470,6 +471,13 @@ public final class MysqlDialectAdapter implements DialectAdapter {
             // Trying to pick a sane default 1e-5 (there is no defined default step for float point
             // type)
             decimalStepSize = new BigDecimal("0.00001");
+          }
+        } else if (indexType.equals(IndexType.TIME_STAMP)) {
+          if (datetimePrecision > 0) {
+            decimalStepSize = BigDecimal.ONE.scaleByPowerOfTen(-numericScale);
+          } else {
+            // Mysql default TIME(O), full second precision
+            decimalStepSize = new BigDecimal("1.0");
           }
         }
 
@@ -719,6 +727,7 @@ public final class MysqlDialectAdapter implements DialectAdapter {
     public static final String CHARACTER_SET_COL = "cols.CHARACTER_SET_NAME";
     public static final String COLLATION_COL = "cols.COLLATION_NAME";
     public static final String NUMERIC_SCALE_COL = "cols.NUMERIC_SCALE";
+    public static final String DATETIME_PRECISION_COL = "cols.DATETIME_PRECISION";
 
     // TODO(vardhanvthigle): MySql 5.7 is always PAD space and does not have PAD_ATTRIBUTE Column.
     public static final String PAD_SPACE_COL = "collations.PAD_ATTRIBUTE";
