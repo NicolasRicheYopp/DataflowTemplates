@@ -377,6 +377,7 @@ public final class MysqlDialectAdapter implements DialectAdapter {
           .put("TINYTEXT", IndexType.STRING)
           .put("DATETIME", IndexType.TIME_STAMP)
           .put("TIMESTAMP", IndexType.TIME_STAMP)
+          .put("TIME", IndexType.TIME)
           .put("YEAR", IndexType.NUMERIC)
           // Float is listed as numeric types in Mysql Ref
           // https://dev.mysql.com/doc/refman/8.4/en/numeric-types.html
@@ -472,7 +473,7 @@ public final class MysqlDialectAdapter implements DialectAdapter {
             // type)
             decimalStepSize = new BigDecimal("0.00001");
           }
-        } else if (indexType.equals(IndexType.TIME_STAMP)) {
+        } else if (indexType.equals(IndexType.TIME)) {
           if (datetimePrecision > 0) {
             decimalStepSize = BigDecimal.ONE.scaleByPowerOfTen(-numericScale);
           } else {
